@@ -13,6 +13,8 @@ struct ContentView: View {
     @State private var userTempratureOutput = "Celsius"
     @State private var inputTempretureDegree: Double = 25
     
+    @FocusState private var isTempratureInputFocused: Bool
+    
     private var outputTempretureDegree: Double {
         switch userTempratureInput {
         case "Fahrenheit":
@@ -83,6 +85,8 @@ struct ContentView: View {
                         }
                     }.pickerStyle(.segmented)
                     TextField("Temreture degree", value: $inputTempretureDegree, format: .number)
+                        .focused($isTempratureInputFocused)
+                        .keyboardType(.decimalPad)
                 } header: {
                     Text("Input tempreture")
                 }
@@ -93,12 +97,20 @@ struct ContentView: View {
                             Text(tempretureType)
                         }
                     }.pickerStyle(.segmented)
-                    Text(outputTempretureDegree, format: .number)
+                    Text("\(outputTempretureDegree, specifier: "%.2f")")
                 } header: {
                     Text("Output tempreture")
                 }
             }
             .navigationTitle("Temperature Converter")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        isTempratureInputFocused = false
+                    }
+                }
+            }
         }
     }
 }
